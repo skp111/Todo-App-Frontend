@@ -1,4 +1,4 @@
-import {useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router";
 import AuthServices from "../services/authServices";
 import toast from "react-hot-toast";
@@ -11,14 +11,17 @@ export default function Login() {
     const navigate = useNavigate();
 
     const loginHandler = async (e) => {
-        try{
+        try {
             e.preventDefault();
-            const response = await AuthServices.loginUser({email, password});
+            const response = await AuthServices.loginUser({ email, password });
+            const token = response.data.token;
+            if (token) 
+                localStorage.setItem('token', token);
             console.log(response.data);
             toast.success(response.data.message);
             localStorage.setItem("user", JSON.stringify(response.data.user));
-            navigate('/todo/home', {state : {user: response.data.user}});
-        }catch(err){
+            navigate('/todo/home', { state: { user: response.data.user } });
+        } catch (err) {
             const message = err.response?.data?.message;
             if (typeof message === "string") {
                 // Single message string

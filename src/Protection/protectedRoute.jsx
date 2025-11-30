@@ -12,6 +12,7 @@ export default function ProtectedRoute({ children }) {
         console.log("Verification response:", response);
         setAuth(response.data.success);
       } catch (err) {
+        console.log('verifyUser error:', err.response?.status, err.response?.data);
         setAuth(false);
       }
     };

@@ -4,6 +4,21 @@ const api = axios.create({
   withCredentials: true, // cookies for auth (optional)
 });
 
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+
 const registerUser = (data) => api.post('/register', data);
 const loginUser = (data) => api.post('/login', data);
 const sendSecurityCode = (data) => api.post('/send-code', data);
